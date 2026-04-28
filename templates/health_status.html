@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}Health Status | HealthRec AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="stepper">
+        <div class="step completed">✓ <span class="step-label">Basic Details</span></div>
+        <div class="step active">2 <span class="step-label">Health Profile</span></div>
+        <div class="step">3 <span class="step-label">Complete</span></div>
+    </div>
+
+    <h1>Update Health Status</h1>
+    <p class="subtitle">Record vitals, conditions and medications for registered profiles.</p>
+
+    <form action="/health-status" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="person_id">Select Person</label>
+                <select id="person_id" name="person_id" required>
+                    <option value="" disabled selected>Choose a person...</option>
+                    {% for person in persons %}
+                        <option value="{{ person.id }}" {% if selected_id|string == person.id|string %}selected{% endif %}>
+                            {{ person.name }} (Age: {{ person.age }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="blood_group">Blood Group</label>
+                <select id="blood_group" name="blood_group" required>
+                    <option value="" disabled selected>Select Type</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Current Status</label>
+                <select id="status" name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Recovered">Recovered</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="record_date">Report Date</label>
+                <input type="date" id="record_date" name="record_date" required>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="conditions">Health Conditions (Comma separated)</label>
+            <textarea id="conditions" name="conditions" rows="2" placeholder="e.g. Hypertension, Seasonal Allergy"></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 2rem;">
+            <label for="medications">Medications (Comma separated)</label>
+            <textarea id="medications" name="medications" rows="2" placeholder="e.g. Lisinopril, Cetirizine"></textarea>
+        </div>
+        
+        <button type="submit" id="submit-health-record">Upload Health Record</button>
+    </form>
+</div>
+
+<script>
+    // Set default date to today
+    document.getElementById('record_date').valueAsDate = new Date();
+</script>
+{% endblock %}

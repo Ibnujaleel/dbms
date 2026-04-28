@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}Summary Dashboard | HealthRec AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Health Summary Dashboard</h1>
+    <p class="subtitle">Analyze across the repository with specialized relational filters.</p>
+
+    <form class="filters" action="/summary" method="GET">
+        <div class="filter-group">
+            <label>Age Range</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="number" name="age_min" placeholder="Min" style="width: 80px;" value="{{ filters.age_min }}">
+                <span style="color: var(--text-muted)">-</span>
+                <input type="number" name="age_max" placeholder="Max" style="width: 80px;" value="{{ filters.age_max }}">
+            </div>
+        </div>
+        <div class="filter-group">
+            <label>Condition</label>
+            <input type="text" name="condition" placeholder="e.g. diabetes" value="{{ filters.condition }}">
+        </div>
+        <div class="filter-group">
+            <label>Status</label>
+            <select name="status">
+                <option value="">All Statuses</option>
+                <option value="Active" {% if filters.status == 'Active' %}selected{% endif %}>Active</option>
+                <option value="Recovered" {% if filters.status == 'Recovered' %}selected{% endif %}>Recovered</option>
+                <option value="Critical" {% if filters.status == 'Critical' %}selected{% endif %}>Critical</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <button type="submit" style="padding: 0.75rem 1.5rem;">Apply Filters</button>
+        </div>
+        <div class="filter-group">
+            <a href="/summary" style="color: var(--text-muted); font-size: 0.8rem; text-decoration: none; padding-bottom: 0.75rem;">Clear All</a>
+        </div>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Age/Gen</th>
+                    <th>Blood</th>
+                    <th>Conditions</th>
+                    <th>Status</th>
+                    <th>Last Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr id="record-{{ record.record_id }}">
+                    <td>
+                        <div style="font-weight: 600;">{{ record.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ record.email }}</div>
+                    </td>
+                    <td>{{ record.age }} / {{ record.gender[0] }}</td>
+                    <td>{{ record.blood_group }}</td>
+                    <td>
+                        <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ record.conditions }}">
+                            {{ record.conditions or 'None' }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ record.status | lower }}">{{ record.status }}</span>
+                    </td>
+                    <td>{{ record.record_date }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        No health records found matching your filters.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

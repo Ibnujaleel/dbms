@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Person | HealthRec AI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="stepper">
+        <div class="step active">1 <span class="step-label">Basic Details</span></div>
+        <div class="step">2 <span class="step-label">Health Profile</span></div>
+        <div class="step">3 <span class="step-label">Complete</span></div>
+    </div>
+
+    <h1>Register New Person</h1>
+    <p class="subtitle">Enter personnel information to initialize a health profile.</p>
+
+    <form action="/add-person" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" placeholder="25" min="0" max="120" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            </div>
+        </div>
+        
+        <button type="submit" id="submit-person">Save & Continue to Step 2 →</button>
+    </form>
+</div>
+{% endblock %}
