@@ -12,7 +12,7 @@ app.secret_key = 'health_records_secret_key_2026'
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '',        # Update with your MySQL password
+    'password': 'your_password',        # Update with your MySQL password
     'database': 'health_records_db'
 }
 
@@ -21,10 +21,10 @@ def get_db_connection():
     """Create and return a MySQL database connection."""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
-        return conn
+        return conn, None
     except Error as e:
         print(f"Database connection error: {e}")
-        return None
+        return None, str(e)
 
 
 def init_database():
@@ -42,7 +42,7 @@ def init_database():
         conn.close()
 
         # Now connect to the created database and set up tables
-        conn = get_db_connection()
+        conn, _ = get_db_connection()
         if conn is None:
             return False
 
@@ -117,9 +117,9 @@ def add_person():
             flash('Age must be a valid number.', 'error')
             return redirect(url_for('add_person'))
 
-        conn = get_db_connection()
+        conn, error_msg = get_db_connection()
         if conn is None:
-            flash('Database connection failed.', 'error')
+            flash(f'Database connection failed: {error_msg}', 'error')
             return redirect(url_for('add_person'))
 
         try:
@@ -148,8 +148,8 @@ def health_status():
     """Page 2: Add or update a health record for a registered person."""
     # Check for pre-selected person from Step 1
     selected_person_id = request.args.get('person_id')
-
-    conn = get_db_connection()
+    
+    conn, _ = get_db_connection()
     persons = []
     if conn:
         try:
@@ -174,9 +174,9 @@ def health_status():
             flash('Person, blood group, status, and date are required.', 'error')
             return redirect(url_for('health_status'))
 
-        conn = get_db_connection()
+        conn, error_msg = get_db_connection()
         if conn is None:
-            flash('Database connection failed.', 'error')
+            flash(f'Database connection failed: {error_msg}', 'error')
             return redirect(url_for('health_status'))
 
         try:
@@ -213,7 +213,7 @@ def summary():
     condition = request.args.get('condition', '').strip()
     status = request.args.get('status', '').strip()
 
-    conn = get_db_connection()
+    conn, _ = get_db_connection()
     records = []
 
     if conn:
@@ -276,7 +276,7 @@ def summary():
 @app.route('/api/persons', methods=['GET'])
 def api_persons():
     """API endpoint to get all persons (used by Health Status page)."""
-    conn = get_db_connection()
+    conn, _ = get_db_connection()
     if conn is None:
         return jsonify([])
     try:
@@ -295,6 +295,9 @@ def api_persons():
 # Main
 # ──────────────────────────────────────────────
 
+
+# Initialize database on module load to ensure it's ready even if using 'flask run'
+init_database()
+
 if __name__ == '__main__':
-    init_database()
     app.run(debug=True, port=5000)
