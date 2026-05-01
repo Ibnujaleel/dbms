@@ -1,17 +1,23 @@
 {% extends "layout.html" %}
 
-{% block title %}Access Restricted | HealthRec AI{% endblock %}
+{% block title %}Access Required | Health AirSense{% endblock %}
 
 {% block content %}
-<div class="card" style="text-align: center; max-width: 500px; margin: 5rem auto;">
-    <div style="font-size: 4rem; margin-bottom: 1rem;">🔒</div>
-    <h1>Restricted Access</h1>
-    <p class="subtitle">This summary dashboard is reserved for administrators only.</p>
-    
-    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 1rem; border: 1px solid rgba(239, 68, 68, 0.2);">
-        <p style="color: #f87171; font-size: 0.9rem;">Please contact the system administrator to obtain an access key.</p>
+<div class="card restricted-card">
+    <div class="restricted-icon">🔒</div>
+    <h1>Secure Environment</h1>
+    <p class="subtitle">The AirSense telemetry dashboard requires administrative authorization.</p>
+
+    <div style="margin: 2rem 0; padding: 2rem; background: rgba(248, 113, 113, 0.05); border-radius: var(--border-radius); border: 1px solid rgba(248, 113, 113, 0.1);">
+        <p style="color: #f87171; font-size: 0.875rem; font-weight: 500; line-height: 1.5;">
+            Access to this node is restricted to authorized personnel. Please provide a valid sync key to proceed.
+        </p>
     </div>
 
-    <a href="/add-person" style="display: inline-block; margin-top: 2rem; color: var(--primary); text-decoration: none; font-weight: 600;">← Back to Public Registration</a>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+        <a href="/add-person" style="color: var(--accent); text-decoration: none; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);">
+            ← Return to Registration
+        </a>
+    </div>
 </div>
 {% endblock %}

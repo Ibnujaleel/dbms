@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}HealthRecords AI{% endblock %}</title>
+    <title>{% block title %}Health AirSense{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <meta name="description" content="A premium health record management system with secure data handling and real-time analytics.">
+    <meta name="description" content="Advanced Air Quality Monitoring & Health Intelligence Platform.">
 </head>
 <body>
     <header>
-        <a href="/" class="logo">HEALTHREC.AI</a>
+        <a href="/" class="logo">HEALTH <span>AIRSENSE</span></a>
         <nav>
-            <a href="/add-person" id="nav-add-person">Add Person</a>
-            <a href="/health-status" id="nav-health-status">Health Status</a>
-            <a href="/summary" id="nav-summary">Summary View</a>
+            <a href="/add-person" id="nav-add-person">Register</a>
+            <a href="/health-status" id="nav-health-status">Health Logs</a>
+            <a href="/summary" id="nav-summary">Dashboard</a>
         </nav>
     </header>
 
@@ -48,8 +48,8 @@
             const messages = document.querySelectorAll('.flash-message');
             messages.forEach(msg => {
                 msg.style.opacity = '0';
-                msg.style.transform = 'translateX(100px)';
-                msg.style.transition = 'all 0.5s ease';
+                msg.style.transform = 'translateY(20px)';
+                msg.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
                 setTimeout(() => msg.remove(), 500);
             });
         }, 5000);

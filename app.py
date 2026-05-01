@@ -12,7 +12,7 @@ app.secret_key = 'health_records_secret_key_2026'
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'your_password',        # Update with your MySQL password
+    'password': '@Axtp8589',        # Update with your MySQL password
     'database': 'health_records_db'
 }
 
@@ -270,7 +270,8 @@ def summary():
 
     return render_template('summary.html', records=records,
                            filters={'age_min': age_min, 'age_max': age_max,
-                                    'condition': condition, 'status': status})
+                                    'condition': condition, 'status': status,
+                                    'key': access_key})
 
 
 @app.route('/api/persons', methods=['GET'])

@@ -1,27 +1,38 @@
 {% extends "layout.html" %}
 
-{% block title %}Summary Dashboard | HealthRec AI{% endblock %}
+{% block title %}Dashboard | Health AirSense{% endblock %}
 
 {% block content %}
 <div class="card">
-    <h1>Health Summary Dashboard</h1>
-    <p class="subtitle">Analyze across the repository with specialized relational filters.</p>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem;">
+        <div>
+            <h1>Monitoring Dashboard</h1>
+            <p class="subtitle">Real-time health telemetry and personnel status records.</p>
+        </div>
+        <div style="background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.2); padding: 0.5rem 1rem; border-radius: 20px; color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+            System Status: Nominal
+        </div>
+    </div>
 
     <form class="filters" action="/summary" method="GET">
+        <input type="hidden" name="key" value="{{ filters.key }}">
+        
         <div class="filter-group">
-            <label>Age Range</label>
+            <label>Age Filtering</label>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <input type="number" name="age_min" placeholder="Min" style="width: 80px;" value="{{ filters.age_min }}">
-                <span style="color: var(--text-muted)">-</span>
-                <input type="number" name="age_max" placeholder="Max" style="width: 80px;" value="{{ filters.age_max }}">
+                <input type="number" name="age_min" placeholder="Min" style="width: 90px;" value="{{ filters.age_min }}">
+                <span style="color: var(--text-secondary)">-</span>
+                <input type="number" name="age_max" placeholder="Max" style="width: 90px;" value="{{ filters.age_max }}">
             </div>
         </div>
-        <div class="filter-group">
-            <label>Condition</label>
-            <input type="text" name="condition" placeholder="e.g. diabetes" value="{{ filters.condition }}">
+
+        <div class="filter-group" style="flex: 1; min-width: 200px;">
+            <label>Pathology / Condition</label>
+            <input type="text" name="condition" placeholder="Search conditions..." value="{{ filters.condition }}">
         </div>
+
         <div class="filter-group">
-            <label>Status</label>
+            <label>Current Status</label>
             <select name="status">
                 <option value="">All Statuses</option>
                 <option value="Active" {% if filters.status == 'Active' %}selected{% endif %}>Active</option>
@@ -29,11 +40,10 @@
                 <option value="Critical" {% if filters.status == 'Critical' %}selected{% endif %}>Critical</option>
             </select>
         </div>
-        <div class="filter-group">
-            <button type="submit" style="padding: 0.75rem 1.5rem;">Apply Filters</button>
-        </div>
-        <div class="filter-group">
-            <a href="/summary" style="color: var(--text-muted); font-size: 0.8rem; text-decoration: none; padding-bottom: 0.75rem;">Clear All</a>
+
+        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+            <button type="submit" style="padding: 0.75rem 1.5rem;">Update View</button>
+            <a href="/summary?key={{ filters.key }}" style="color: var(--text-secondary); font-size: 0.75rem; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Clear</a>
         </div>
     </form>
 
@@ -41,37 +51,43 @@
         <table>
             <thead>
                 <tr>
-                    <th>Patient</th>
-                    <th>Age/Gen</th>
-                    <th>Blood</th>
-                    <th>Conditions</th>
+                    <th>Personnel</th>
+                    <th>Demographics</th>
+                    <th>Medical Profile</th>
                     <th>Status</th>
-                    <th>Last Update</th>
+                    <th>Last Sync</th>
                 </tr>
             </thead>
             <tbody>
                 {% for record in records %}
-                <tr id="record-{{ record.record_id }}">
+                <tr>
                     <td>
-                        <div style="font-weight: 600;">{{ record.name }}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ record.email }}</div>
+                        <div style="font-weight: 600; color: var(--text-primary);">{{ record.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">{{ record.email }}</div>
                     </td>
-                    <td>{{ record.age }} / {{ record.gender[0] }}</td>
-                    <td>{{ record.blood_group }}</td>
                     <td>
-                        <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ record.conditions }}">
-                            {{ record.conditions or 'None' }}
+                        <div style="font-size: 0.875rem;">{{ record.age }}Y / {{ record.gender }}</div>
+                        <div style="font-size: 0.75rem; color: var(--accent);">Type: {{ record.blood_group }}</div>
+                    </td>
+                    <td>
+                        <div style="max-width: 300px; font-size: 0.8125rem; line-height: 1.4;">
+                            <span style="color: var(--text-primary); font-weight: 500;">Cond:</span> {{ record.conditions or 'None detected' }}
+                            <br>
+                            <span style="color: var(--text-primary); font-weight: 500;">Med:</span> {{ record.medications or 'N/A' }}
                         </div>
                     </td>
                     <td>
                         <span class="badge badge-{{ record.status | lower }}">{{ record.status }}</span>
                     </td>
-                    <td>{{ record.record_date }}</td>
+                    <td style="font-size: 0.75rem;">
+                        {{ record.record_date }}
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                        No health records found matching your filters.
+                    <td colspan="5" style="text-align: center; padding: 4rem; color: var(--text-secondary);">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">📡</div>
+                        No telemetry records found for current filter parameters.
                     </td>
                 </tr>
                 {% endfor %}
