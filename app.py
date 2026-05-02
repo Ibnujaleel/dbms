@@ -12,7 +12,7 @@ app.secret_key = 'health_records_secret_key_2026'
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '@Axtp8589',        # Update with your MySQL password
+    'password': '',        # Update with your MySQL password
     'database': 'health_records_db'
 }
 
